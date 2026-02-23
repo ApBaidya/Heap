@@ -13,7 +13,7 @@ void addSort(int* heap, int lastPos);
 int* Add(int* heap, int &lastPos);
 void fileAdd(int* heap, int &lastPos);
 void Print(int* heap, int lastPos);
-void rmvSort(int* heap, int pos);
+void rmvSort(int* heap, int pos, int lastPos);
 void Delete(int* heap, int &lastPos);
 void Reset(int* heap, int &lastPos);
 
@@ -139,32 +139,82 @@ void Print(int* heap, int lastPos){
   }
   //not really sure what to do here hahaha.
 }
-
-void rmvSort(int* heap, int pos){
-  int leftPos = (2*pos)+1;
+//??????? Why is this not working
+void rmvSort(int* heap, int pos, int lastPos){
+  int leftPos = (2*pos)+1;//left = 2i + 1, right = 2i + 2
   int rightPos = (2*pos)+2;
   int current = heap[pos];
-  int leftC = heap[leftPos];
-  int rightC = heap[rightPos];
+  cout<<current<<"left"<<heap[leftPos]<<"right"<<heap[rightPos]<<endl;
   //returns
-  //if()
+  if(leftPos>=lastPos){
+    //leaf
+    cout<<"NAH"<<endl;
+    return;
+  }
+  int leftC = heap[leftPos];
+  if(rightPos>lastPos){//only look at leftmost
+    if(leftC>current){
+      cout<<"AAAA"<<endl;
+      heap[leftPos] = current;
+      heap[pos] = leftC;
+      cout<<heap[pos]<<endl;
+      return;//?
+    }
+  }
+  int rightC = heap[rightPos];
   //check left and right child --> who is larger
-  //left = 2i + 1, right = 2i + 2
-  //if root is less than one of them, swap
-  //recurse until bigger than children, or at leaf
+  if(leftC>current && rightC>current){
+    if(leftC>= rightC){
+      int leftC = heap[leftPos];
+      heap[leftPos]=current;
+      heap[pos]=leftC;
+      cout<<"A"<<endl;
+      cout<<heap[pos];
+      rmvSort(heap, leftPos, lastPos);
+      return;
+    }
+    else{
+      heap[rightPos]=current;
+      heap[pos]=rightC;
+      cout<<"B"<<endl;
+      rmvSort(heap, rightPos, lastPos);
+      return;
+    }
+  }
+  else if(leftC>current){
+    heap[leftPos]=current;
+    heap[pos]=leftC;
+    cout<<"C"<<endl;
+    rmvSort(heap, leftPos, lastPos);
+    return;
+  }
+  else if(rightC>current){
+    heap[rightPos]=current;
+    heap[pos]=rightC;
+    cout<<"D"<<endl;
+    rmvSort(heap, rightPos, lastPos);
+    return;
+  }
+  return;
 }
 
 void Delete(int* heap, int &lastPos){
   //output root value to console
-  int heap2[lastPos];//make a smaller array
-  cout<<"root"<<heap[0];
-  int root = heap[0];
-  int last = heap[lastPos];
-  //move bottom of tree to the root
-  //reduce table size
-  //rm sort
-  int pos = 0;//root
-  rmvSort(heap, lastPos);
+  if(lastPos != 0){
+    int* tempH = new int[lastPos-1];//make a smaller array
+    cout<<"root"<<heap[0]<<endl;
+    int root = heap[0];
+    int last = heap[lastPos-1];
+    cout<<last<<endl;
+    heap[0] = last;
+    heap[lastPos-1] = root;
+    -- lastPos;
+    for(int i = 0;i<lastPos;i++){
+      tempH[i] = heap[i];
+    }
+    int pos = 0;
+    rmvSort(tempH, pos, lastPos);
+  }
 }
 
 void Reset(int* heap, int &lastPos){
