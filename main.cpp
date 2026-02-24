@@ -51,6 +51,7 @@ int main(){
     else if(input == 'q'){
       Reset(heap, lastPos);
       Print(heap, lastPos);//just to check
+      delete[] heap;
       running = 0;
     }
   }//end main loop
@@ -224,5 +225,10 @@ int* Delete(int* heap, int &lastPos){
 }
 
 void Reset(int* heap, int &lastPos){
-  //just...keep calling delete 
+  int oldLP = lastPos;
+  for(int i = 0; i < oldLP; i ++){
+  //just...keep calling delete
+    heap = Delete(heap, lastPos);
+  }
+  Print(heap, lastPos);
 }
