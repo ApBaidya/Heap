@@ -5,6 +5,7 @@ Aparajita Baidya 2.24.2026
 #include <cstring>
 #include <fstream>
 #include <string>//oh god.
+#include <cmath>
 
 using namespace std;
 
@@ -138,12 +139,21 @@ void fileAdd(int* heap, int &lastPos){
   }
 }
 
-void Print(int* heap, int lastPos){
+void Print(int* heap, int lastPos){//https://math.stackexchange.com/questions/1602699/find-what-row-a-given-number-exists-in-within-a-binary-heap-tree
+  //so, this makes sense. the first row is 2^0, then 2^1, then 2^2, and so on, which kind of explains the log base 2. Log 2^n/log2 will always give the row number (staring at zero...although the index count starts at 1)...so anything between 2^n and 2^(n+1) will result in logi/log 2 be between those row numbers (not sure if this explanation makes sense, haha. But this is probably why this works.)
   cout<<"PRINING"<<endl;
-  for(int i = 0; i<lastPos; i ++){
+  /*for(int i = 0; i<lastPos; i ++){
     cout<<heap[i]<<endl;
   }
-  //not really sure what to do here hahaha.
+  //not really sure what to do here hahaha.*/
+  cout<<lastPos;
+  int pos = lastPos; //initial position to print out at
+  int rowNum;//determine the amount of tabs needed
+  rowNum = (log(pos))/(log(2));
+  for(int i = 0; i < rowNum; i ++){
+    cout<<"  ";
+  }
+  cout<<heap[pos-1]<<endl;
 }
 //??????? Why is this not working
 void rmvSort(int* heap, int pos, int lastPos){
