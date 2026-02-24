@@ -1,5 +1,5 @@
 /*
-Aparajita Baidya 2.22.2026
+Aparajita Baidya 2.24.2026
 */
 #include <iostream>
 #include <cstring>
@@ -14,7 +14,7 @@ int* Add(int* heap, int &lastPos);
 void fileAdd(int* heap, int &lastPos);
 void Print(int* heap, int lastPos);
 void rmvSort(int* heap, int pos, int lastPos);
-void Delete(int* heap, int &lastPos);
+int* Delete(int* heap, int &lastPos);
 void Reset(int* heap, int &lastPos);
 
 //main
@@ -40,8 +40,10 @@ int main(){
       Print(heap, lastPos);
     }
     else if(input == 'd'){
-      Delete(heap, lastPos);
+      //cout<<"LASTPOS"<<lastPos<<endl;
+      heap = Delete(heap, lastPos);
       Print(heap, lastPos);//just to check
+      //cout<<"LASTPOS"<<lastPos<<endl;
     }
     else if(input == 'r'){
       Reset(heap, lastPos);
@@ -84,7 +86,7 @@ int* Add(int* heap, int &lastPos){
   for(int i = 0; i<lastPos; i++){
     tempH2[i] = heap[i];
   }
-  cout<<tempH[0]<<endl;
+  //cout<<tempH[0]<<endl;
   //keep asking them for numbers till they want to stop
   while(running == 'y'){
     cout<<"would you like to add (y/n)"<<endl;
@@ -99,10 +101,11 @@ int* Add(int* heap, int &lastPos){
       cout<<"gimme data"<<endl;
       cin>>data;
       tempH[lastPos]=data;
-      cout<<tempH[0]<<endl;
+      //cout<<tempH[0]<<endl;
+      Print(tempH, lastPos);
       addSort(tempH, lastPos);
       ++ lastPos;
-      cout<<tempH[0];
+      //cout<<tempH[0];
       tempH2 = new int[lastPos];
       for(int i = 0; i<lastPos; i++){
 	tempH2[i] = tempH[i];
@@ -110,7 +113,7 @@ int* Add(int* heap, int &lastPos){
     }
   }
   delete[] tempH2;
-  cout<<tempH[0];
+  //cout<<tempH[0];
   return tempH;
   cout<<"done adding, then."<<endl;
 }
@@ -125,6 +128,7 @@ void fileAdd(int* heap, int &lastPos){
   if(nums.is_open()){
     //go through file and add each number...one by one...
     while(nums>>data){
+      
     }
     cout<<"done adding, then (with the file)"<<endl;
   }
@@ -134,6 +138,7 @@ void fileAdd(int* heap, int &lastPos){
 }
 
 void Print(int* heap, int lastPos){
+  cout<<"PRINING"<<endl;
   for(int i = 0; i<lastPos; i ++){
     cout<<heap[i]<<endl;
   }
@@ -164,12 +169,11 @@ void rmvSort(int* heap, int pos, int lastPos){
   int rightC = heap[rightPos];
   //check left and right child --> who is larger
   if(leftC>current && rightC>current){
-    if(leftC>= rightC){
-      int leftC = heap[leftPos];
+    if(leftC>=rightC){
       heap[leftPos]=current;
       heap[pos]=leftC;
       cout<<"A"<<endl;
-      cout<<heap[pos];
+      cout<<"new"<<heap[pos]<<endl;
       rmvSort(heap, leftPos, lastPos);
       return;
     }
@@ -198,7 +202,7 @@ void rmvSort(int* heap, int pos, int lastPos){
   return;
 }
 
-void Delete(int* heap, int &lastPos){
+int* Delete(int* heap, int &lastPos){
   //output root value to console
   if(lastPos != 0){
     int* tempH = new int[lastPos-1];//make a smaller array
@@ -214,7 +218,9 @@ void Delete(int* heap, int &lastPos){
     }
     int pos = 0;
     rmvSort(tempH, pos, lastPos);
+    return tempH;
   }
+  return heap;
 }
 
 void Reset(int* heap, int &lastPos){
