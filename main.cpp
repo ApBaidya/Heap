@@ -1,5 +1,5 @@
 /*
-Aparajita Baidya 2.24.2026
+Aparajita Baidya 2.26.2026
 */
 #include <iostream>
 #include <cstring>
@@ -12,7 +12,7 @@ using namespace std;
 //definitions
 void addSort(int* heap, int lastPos);
 int* Add(int* heap, int &lastPos);
-void fileAdd(int* heap, int &lastPos);
+int* fileAdd(int* heap, int &lastPos);
 void Print(int* heap, int lastPos, int currPos, int tabs);
 void rmvSort(int* heap, int pos, int lastPos);
 int* Delete(int* heap, int &lastPos);
@@ -35,7 +35,7 @@ int main(){
       heap = Add(heap, lastPos);
     }
     else if(input == 'f'){
-      fileAdd(heap, lastPos);
+      heap = fileAdd(heap, lastPos);
     }
     else if(input == 'p'){
       cout<<"ok"<<endl;
@@ -121,22 +121,39 @@ int* Add(int* heap, int &lastPos){
   cout<<"done adding, then."<<endl;
 }
 
-void fileAdd(int* heap, int &lastPos){
+int* fileAdd(int* heap, int &lastPos){//add, but now no need for user input
   string filePath;//(-_-)...
   int data;
+  int* tempH = new int[lastPos];
+  int* tempH2 = new int[lastPos];
+  for(int i = 0; i<lastPos; i++){
+    tempH2[i] = heap[i];
+  }
   cout<<"Gimme that file path"<<endl;
   cin>>filePath;
   cin.clear();
   ifstream nums(filePath);
-  if(nums.is_open()){
-    //go through file and add each number...one by one...
+  if(nums.is_open()){ //go through file and add each number...one by one...
     while(nums>>data){
-      
+      tempH = new int[lastPos + 1];
+      for(int i = 0; i < lastPos; i ++){
+        tempH[i] = tempH2[i];
+      }
+      tempH[lastPos] = data;
+      addSort(tempH, lastPos);
+      ++ lastPos;
+      //cout<<tempH[0];
+      tempH2 = new int[lastPos];
+      for(int i = 0; i<lastPos; i++){
+        tempH2[i] = tempH[i];
+      }
     }
-    cout<<"done adding, then (with the file)"<<endl;
+    delete[] tempH2;
+    return tempH;
   }
   else{
     cout<<"ooooops can't seem to open that fellow."<<endl;
+    return tempH2;
   }
 }
 
@@ -157,7 +174,8 @@ void Print(int* heap, int lastPos, int currPos, int tabs){
     //if (2*currPos)+2 is >= lastPos, we have finished the print
   }
 }
-//??????? Why is this not working
+
+
 void rmvSort(int* heap, int pos, int lastPos){
   int leftPos = (2*pos)+1;//left = 2i + 1, right = 2i + 2
   int rightPos = (2*pos)+2;
