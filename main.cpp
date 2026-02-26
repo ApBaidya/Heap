@@ -13,7 +13,7 @@ using namespace std;
 void addSort(int* heap, int lastPos);
 int* Add(int* heap, int &lastPos);
 void fileAdd(int* heap, int &lastPos);
-void Print(int* heap, int lastPos);
+void Print(int* heap, int lastPos, int currPos, int tabs);
 void rmvSort(int* heap, int pos, int lastPos);
 int* Delete(int* heap, int &lastPos);
 void Reset(int* heap, int &lastPos);
@@ -38,12 +38,13 @@ int main(){
       fileAdd(heap, lastPos);
     }
     else if(input == 'p'){
-      Print(heap, lastPos);
+      cout<<"ok"<<endl;
+      Print(heap, lastPos, 0, 0);
     }
     else if(input == 'd'){
       //cout<<"LASTPOS"<<lastPos<<endl;
       heap = Delete(heap, lastPos);
-      Print(heap, lastPos);//just to check
+      Print(heap, lastPos, 0, 0);//just to check
       //cout<<"LASTPOS"<<lastPos<<endl;
     }
     else if(input == 'r'){
@@ -51,7 +52,7 @@ int main(){
     }
     else if(input == 'q'){
       Reset(heap, lastPos);
-      Print(heap, lastPos);//just to check
+      Print(heap, lastPos, 0, 0);//just to check
       delete[] heap;
       running = 0;
     }
@@ -104,7 +105,7 @@ int* Add(int* heap, int &lastPos){
       cin>>data;
       tempH[lastPos]=data;
       //cout<<tempH[0]<<endl;
-      Print(tempH, lastPos);
+      //Print(tempH, lastPos);
       addSort(tempH, lastPos);
       ++ lastPos;
       //cout<<tempH[0];
@@ -139,21 +140,22 @@ void fileAdd(int* heap, int &lastPos){
   }
 }
 
-void Print(int* heap, int lastPos){//https://math.stackexchange.com/questions/1602699/find-what-row-a-given-number-exists-in-within-a-binary-heap-tree
-  //so, this makes sense. the first row is 2^0, then 2^1, then 2^2, and so on, which kind of explains the log base 2. Log 2^n/log2 will always give the row number (staring at zero...although the index count starts at 1)...so anything between 2^n and 2^(n+1) will result in logi/log 2 be between those row numbers (not sure if this explanation makes sense, haha. But this is probably why this works.)
-  cout<<"PRINING"<<endl;
-  /*for(int i = 0; i<lastPos; i ++){
-    cout<<heap[i]<<endl;
+void Print(int* heap, int lastPos, int currPos, int tabs){
+  //cout<<"b"<<endl;
+  if(currPos<lastPos){//if left is less than the last position(can keep gong down)
+    //cout<<"hey"<<endl;
+    Print(heap, lastPos, (currPos*2)+2, tabs+1);//go down the tree
+    //actually print out value
+    for(int i = 0; i < tabs; i ++){
+      cout<<"\t";
+    }
+    cout<<heap[currPos]<<endl;
+    //cout<<"a"<<endl;
+    Print(heap, lastPos, (currPos*2)+1, tabs+1);//look at the right child now, make it the new head
+    return;
+    //cout<<"Nah"<<endl;
+    //if (2*currPos)+2 is >= lastPos, we have finished the print
   }
-  //not really sure what to do here hahaha.*/
-  cout<<lastPos;
-  int pos = lastPos; //initial position to print out at
-  int rowNum;//determine the amount of tabs needed
-  rowNum = (log(pos))/(log(2));
-  for(int i = 0; i < rowNum; i ++){
-    cout<<"  ";
-  }
-  cout<<heap[pos-1]<<endl;
 }
 //??????? Why is this not working
 void rmvSort(int* heap, int pos, int lastPos){
@@ -240,5 +242,5 @@ void Reset(int* heap, int &lastPos){
   //just...keep calling delete
     heap = Delete(heap, lastPos);
   }
-  Print(heap, lastPos);
+  //Print(heap, lastPos);
 }
