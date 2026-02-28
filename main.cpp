@@ -1,5 +1,5 @@
 /*
-Aparajita Baidya 2.26.2026
+Aparajita Baidya 2.27.2026
 */
 #include <iostream>
 #include <cstring>
@@ -53,7 +53,7 @@ int main(){
     else if(input == 'q'){
       Reset(heap, lastPos);
       Print(heap, lastPos, 0, 0);//just to check
-      delete[] heap;
+      delete[] heap;//free it. freedom. 
       running = 0;
     }
   }//end main loop
@@ -97,17 +97,17 @@ int* Add(int* heap, int &lastPos){
     cin.ignore(10, '\n');
     cin.clear();
     if(running == 'y'){
-      tempH = new int[lastPos + 1];
-      for(int i = 0; i < lastPos; i ++){
+      tempH = new int[lastPos + 1];//set tempH
+      for(int i = 0; i < lastPos; i ++){//set tempH2
 	tempH[i] = tempH2[i];
       }
       cout<<"gimme data"<<endl;
       cin>>data;
-      tempH[lastPos]=data;
+      tempH[lastPos]=data;//put it in new array
       //cout<<tempH[0]<<endl;
       //Print(tempH, lastPos);
       addSort(tempH, lastPos);
-      ++ lastPos;
+      ++ lastPos;//get new last pos
       //cout<<tempH[0];
       tempH2 = new int[lastPos];
       for(int i = 0; i<lastPos; i++){
@@ -115,10 +115,10 @@ int* Add(int* heap, int &lastPos){
       }
     }
   }
-  delete[] tempH2;
+  delete[] tempH2;//I probably didn't need this in the first place
   //cout<<tempH[0];
   return tempH;
-  cout<<"done adding, then."<<endl;
+  //cout<<"done adding, then."<<endl;
 }
 
 int* fileAdd(int* heap, int &lastPos){//add, but now no need for user input
@@ -134,8 +134,8 @@ int* fileAdd(int* heap, int &lastPos){//add, but now no need for user input
   cin.clear();
   ifstream nums(filePath);
   if(nums.is_open()){ //go through file and add each number...one by one...
-    while(nums>>data){
-      tempH = new int[lastPos + 1];
+    while(nums>>data){//go through file, each num gets set to data
+      tempH = new int[lastPos + 1];//increase tempH
       for(int i = 0; i < lastPos; i ++){
         tempH[i] = tempH2[i];
       }
@@ -152,7 +152,7 @@ int* fileAdd(int* heap, int &lastPos){//add, but now no need for user input
     return tempH;
   }
   else{
-    cout<<"ooooops can't seem to open that fellow."<<endl;
+    cout<<"ooooops can't seem to open that fellow."<<endl;//if file input doesn't work
     return tempH2;
   }
 }
@@ -216,7 +216,7 @@ void rmvSort(int* heap, int pos, int lastPos){
       return;
     }
   }
-  else if(leftC>current){
+  else if(leftC>current){//this is pretty much just swapping 
     heap[leftPos]=current;
     heap[pos]=leftC;
     cout<<"C"<<endl;
@@ -243,8 +243,8 @@ int* Delete(int* heap, int &lastPos){
     cout<<last<<endl;
     heap[0] = last;
     heap[lastPos-1] = root;
-    -- lastPos;
-    for(int i = 0;i<lastPos;i++){
+    -- lastPos;//swap root and leaf and reduce lastPos
+    for(int i = 0;i<lastPos;i++){//put all values from swapped heap into tempH
       tempH[i] = heap[i];
     }
     int pos = 0;
